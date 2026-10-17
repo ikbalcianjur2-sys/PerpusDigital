@@ -14,10 +14,10 @@
         <nav class="sidebar">
             <ul>
                 <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ route('books.index') }}">Books</a></li>
-                <li><a href="{{ route('authors.index') }}">Authors</a></li>
-                <li><a href="{{ route('categories.index') }}">Categories</a></li>
-                <li><a href="{{ route('users.index') }}">Users</a></li>
+                <li><a href="{{ route('books.index') }}">Buku</a></li>
+                <li><a href="{{ route('authors.index') }}">Penerbit</a></li>
+                <li><a href="{{ route('categories.index') }}">Kategori</a></li>
+                <li><a href="{{ route('users.index') }}">Riwayat Peminjaman</a></li>
             </ul>
         </nav>
 </body>
