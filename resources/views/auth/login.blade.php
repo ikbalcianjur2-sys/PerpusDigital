@@ -1,47 +1,97 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!-- Taruh file ini di: resources/views/auth/login.blade.php
+     (buat folder "auth" di dalam resources/views/ kalau belum ada) -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - {{ \App\Models\Setting::current()->nama_perpustakaan ?? 'Perpustakaan' }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <span class="brand-icon"></span>
+                <span>{{ \App\Models\Setting::current()->nama_perpustakaan ?? 'PerpusKu' }}</span>
+            </div>
+            <p class="auth-subtitle">Masuk untuk mengelola perpustakaan Anda</p>
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
+            @if (session('success'))
+                <div class="alert alert-success" data-autohide>
+                    <span>✅ {{ session('success') }}</span>
+                    <button class="alert-close" type="button">&times;</button>
+                </div>
             @endif
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+            @if ($errors->any())
+                <div class="alert alert-error">
+                    <span>⚠️ {{ $errors->first() }}</span>
+                </div>
+            @endif
+
+            <form action="{{ route('login') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" value="{{ old('email') }}" required autofocus placeholder="nama@email.com">
+                </div>
+<div class="form-group">
+    <label>Password</label>
+
+    <div style="position: relative;">
+        <input
+            type="password"
+            name="password"
+            id="password"
+            required
+            placeholder="••••••••"
+            style="padding-right: 45px;"
+        >
+
+        <button
+            type="button"
+            id="togglePassword"
+            style="
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                border: none;
+                background: transparent;
+                cursor: pointer;
+                font-size: 18px;
+            "
+        >👁️</button>
+    </div>
+</div>
+                <div class="form-group" style="display:flex; align-items:center; justify-content:space-between;">
+                    <label style="display:flex; align-items:center; gap:6px; margin:0; font-weight:400; color:var(--gray-700); font-size:13px;">
+                        <input type="checkbox" name="remember" style="width:auto;"> Ingat saya
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+            </form>
         </div>
-    </form>
-</x-guest-layout>
+    </div>
+
+    <script src="{{ asset('js/app.js') }}"></script>
+<script>
+const password = document.getElementById('password');
+const togglePassword = document.getElementById('togglePassword');
+
+togglePassword.addEventListener('click', function () {
+
+    if (password.type === 'password') {
+        password.type = 'text';
+        togglePassword.textContent = '🙈';
+    } else {
+        password.type = 'password';
+        togglePassword.textContent = '👁️';
+    }
+
+});
+</script>
+</body>
+</html>

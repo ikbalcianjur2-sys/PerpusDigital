@@ -1,4 +1,5 @@
 <?php
+// Simpan sebagai: app/Http/Middleware/EnsureUserIsAdmin.php
 
 namespace App\Http\Middleware;
 
@@ -8,14 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserIsAdmin
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
-    
     {
+        if (! auth()->check() || auth()->user()->role !== 'admin') {
+            abort(403, 'Anda tidak punya akses ke halaman ini. Hubungi admin.');
+        }
+
         return $next($request);
     }
 }
